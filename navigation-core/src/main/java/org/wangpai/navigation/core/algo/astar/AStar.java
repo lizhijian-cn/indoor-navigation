@@ -72,7 +72,7 @@ public class AStar {
                     pq.add(neighbour);
                     parents.put(neighbour, cur);
                     if (neighbour.equals(dst.key)) {
-                        System.out.printf("find target");
+                        System.out.println("find target");
                         printPath(dst.key, parents);
                         pq.clear();
                         return;
