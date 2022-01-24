@@ -3,9 +3,7 @@ package org.wangpai.navigation.core.vertex;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.wangpai.navigation.core.layout.Layout;
 
 @Builder
 @NoArgsConstructor
@@ -13,11 +11,12 @@ import org.wangpai.navigation.core.layout.Layout;
 public class Vertex {
     public VertexKey key;
     public VertexTypeEnum type;
+    public int typeIdx;
     public double x, y;
 
-//    public int getFloor() {
-//        return layout.getFloor();
-//    }
+    //    public int getFloor() {
+    //        return layout.getFloor();
+    //    }
 
     public static double manhattanDistance(Vertex v1, Vertex v2) {
         return Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y);
@@ -25,5 +24,10 @@ public class Vertex {
 
     public static double euclideanDistance(Vertex v1, Vertex v2) {
         return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
+    }
+
+    @Override
+    public String toString() {
+        return "Vertex{" + "key=" + key + ", type=" + type + ", typeIdx=" + typeIdx + ", x=" + x + ", y=" + y + '}';
     }
 }

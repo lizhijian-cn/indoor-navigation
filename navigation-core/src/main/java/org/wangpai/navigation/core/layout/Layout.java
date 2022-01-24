@@ -14,6 +14,7 @@ import java.util.List;
  * 日后需抽象接口，搞成邻接表
  */
 @Data
+@Deprecated
 public class Layout {
     private static Logger logger = LoggerFactory.getLogger(Layout.class);
 

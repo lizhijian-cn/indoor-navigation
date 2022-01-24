@@ -104,6 +104,7 @@ public class Demo {
                     .x(record.x)
                     .y(record.y)
                     .type(type)
+                    .typeIdx(record.rowNum)
                     .build();
 
             String ref = vertexRef(key.floor, type, record.rowNum);

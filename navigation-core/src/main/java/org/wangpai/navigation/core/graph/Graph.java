@@ -3,7 +3,6 @@ package org.wangpai.navigation.core.graph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wangpai.navigation.core.edge.Edge;
-import org.wangpai.navigation.core.layout.Layout;
 import org.wangpai.navigation.core.vertex.Vertex;
 import org.wangpai.navigation.core.vertex.VertexKey;
 
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 三维图
@@ -51,10 +51,12 @@ public class Graph {
                 .x(x)
                 .y(y)
                 .build();
-
-        Vertex nearest = vertexList.get(0);
+        List<Vertex> sameFloorVertex = vertexList.stream()
+                .filter(v -> v.key.floor == floor)
+                .collect(Collectors.toList());
+        Vertex nearest = sameFloorVertex.get(0);
         double shortestDistance = Vertex.euclideanDistance(center, nearest);
-        for (Vertex vertex : vertexList) {
+        for (Vertex vertex : sameFloorVertex) {
             double d = Vertex.euclideanDistance(center, vertex);
             if (d < shortestDistance) {
                 nearest = vertex;
@@ -77,6 +79,9 @@ public class Graph {
         return 0.0; // TODO Dij
     }
 
+    public Vertex getVertexByKey(VertexKey key) {
+        return vertexMap.get(key);
+    }
     //    private double searchInSameLayout(Vertex v1, Vertex v2) {
     //
     //    }

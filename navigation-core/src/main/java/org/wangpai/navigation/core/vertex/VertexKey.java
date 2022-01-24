@@ -27,4 +27,9 @@ public class VertexKey {
         result = 31 * result + idx;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "{" + "floor=" + floor + ", idx=" + idx + '}';
+    }
 }
