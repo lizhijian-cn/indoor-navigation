@@ -1,28 +1,83 @@
 package org.wangpai.navigation.core.graph;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.wangpai.navigation.core.edge.Edge;
 import org.wangpai.navigation.core.layout.Layout;
 import org.wangpai.navigation.core.vertex.Vertex;
-import org.wangpai.navigation.core.vertex.VertexTypeEnum;
+import org.wangpai.navigation.core.vertex.VertexKey;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 三维图
  */
 public class Graph {
-    List<Layout> layoutList;
+    //    List<Layout> layoutList;
+    private static Logger logger = LoggerFactory.getLogger(Graph.class);
 
-    public double search(int floor1, int idx1, VertexTypeEnum type1, int floor2, int idx2, VertexTypeEnum type2) {
-        if (floor1 == floor2) {
-            lay
-            layoutList.get(floor1-1).
-            return searchInSameLayout(v1, v2);
-        } else {
-            return 0.0;
+    List<Vertex> vertexList;
+    Map<VertexKey, Vertex> vertexMap = new HashMap<>();
+    List<Edge> edgeList = new ArrayList<>();
+    Map<VertexKey, Integer> head = new HashMap<>();
+
+    public Graph(List<Vertex> vertexList) {
+        this.vertexList = vertexList;
+        for (Vertex vertex : vertexList) {
+            vertexMap.put(vertex.key, vertex);
         }
+        edgeList.add(null); // 0 means end
     }
 
-//    private double searchInSameLayout(Vertex v1, Vertex v2) {
-//
-//    }
+    public void addEdge(VertexKey from, VertexKey to) {
+        Edge edge = Edge.builder()
+                .next(head.getOrDefault(from, 0))
+                .to(to)
+                .weight(Vertex.euclideanDistance(vertexMap.get(from), vertexMap.get(to)))
+                .build();
+        edgeList.add(edge);
+        head.put(from, edgeList.size() - 1);
+    }
+
+    public Vertex nearestVertex(int floor, double x, double y) {
+        if (vertexList.size() == 0) {
+            logger.warn("no vertex");
+            return new Vertex();
+        }
+        Vertex center = Vertex.builder()
+                .x(x)
+                .y(y)
+                .build();
+
+        Vertex nearest = vertexList.get(0);
+        double shortestDistance = Vertex.euclideanDistance(center, nearest);
+        for (Vertex vertex : vertexList) {
+            double d = Vertex.euclideanDistance(center, vertex);
+            if (d < shortestDistance) {
+                nearest = vertex;
+                shortestDistance = d;
+            }
+        }
+
+        return nearest;
+    }
+
+    public List<Edge> getNeighbours(VertexKey v) {
+        List<Edge> neighbours = new ArrayList<>();
+        for (int i = head.get(v); i != 0; i = edgeList.get(i).next) {
+            neighbours.add(edgeList.get(i));
+        }
+        return neighbours;
+    }
+
+    public double getHScore(VertexKey v, Vertex dst) {
+        return 0.0; // TODO Dij
+    }
+
+    //    private double searchInSameLayout(Vertex v1, Vertex v2) {
+    //
+    //    }
 }

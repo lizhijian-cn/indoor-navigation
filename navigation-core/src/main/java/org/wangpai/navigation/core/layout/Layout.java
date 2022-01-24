@@ -1,6 +1,9 @@
 package org.wangpai.navigation.core.layout;
 
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.wangpai.navigation.core.edge.Edge;
 import org.wangpai.navigation.core.vertex.Vertex;
 
 import java.util.List;
@@ -12,22 +15,45 @@ import java.util.List;
  */
 @Data
 public class Layout {
+    private static Logger logger = LoggerFactory.getLogger(Layout.class);
+
+
+    List<Integer> head;
+    List<Edge> edges;
+
     int floor;
     int vertexNum;
+    Vertex[] vertexes;
     List<Integer> stairwayVertex;
     List<Integer> elevatorVertex;
 
-    double[] gScore, hScore, fScore;
-    public void init(int vertexNum) {
+
+    public void init(List<Vertex> vertexList) {
+        this.vertexNum = vertexList.size();
         this.vertexNum = vertexNum;
 
     }
 
-    public double aStar(int vertexIdx1, int vertexIdx2) {
 
+    // TODO optimise
+    public Vertex nearestVertex(double x, double y) {
+        if (vertexNum == 0) {
+            logger.warn("no vertex in layout {}", floor);
+            return new Vertex();
+        }
+        Vertex center = Vertex.builder().x(x).y(y).build();
+
+        Vertex nearest = vertexes[0];
+        double shortestDistance = Vertex.euclideanDistance(center, nearest);
+        for (Vertex vertex : vertexes) {
+            double d = Vertex.euclideanDistance(center, vertex);
+            if (d < shortestDistance) {
+                nearest = vertex;
+                shortestDistance = d;
+            }
+        }
+
+        return nearest;
     }
 
-    private double hFunc(Vertex v1, Vertex v2) {
-        return Math.abs(v1.getX() - v2.getX()) + Math.abs(v1.getY() - v2.getY());
-    }
 }

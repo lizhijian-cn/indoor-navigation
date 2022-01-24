@@ -7,10 +7,6 @@ public class GraphHelper {
     public Vertex parseVertex(String s) {
         String[] ss = s.split(" ");
         int floor = Integer.parseInt(ss[0]);
-        if (ss.length == 2) {
-            return Vertex.builder()
-                    .floor(floor)
-                    .
-        }
+        return null;
     }
 }
