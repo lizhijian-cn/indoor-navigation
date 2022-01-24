@@ -72,7 +72,7 @@ public class AStar {
                     pq.add(neighbour);
                     parents.put(neighbour, cur);
                     if (neighbour.equals(dst.key)) {
-                        System.out.println("find target");
+                        System.out.println("find target " + dst);
                         printPath(dst.key, parents);
                         pq.clear();
                         return;
@@ -88,6 +88,7 @@ public class AStar {
 
     private void printPath(VertexKey v, Map<VertexKey, VertexKey> parents) {
         while (true) {
+            System.out.println(graph.getVertexByKey(v));
             VertexKey p = parents.get(v);
             if (p == null) {
                 logger.error("wrong");
@@ -96,7 +97,6 @@ public class AStar {
             if (p.equals(v)) {
                 break;
             }
-            System.out.println(graph.getVertexByKey(p));
             v = p;
         }
     }
